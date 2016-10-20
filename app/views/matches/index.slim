@@ -1,28 +1,29 @@
-.row
-  .col-md-12
-    h1 Recent Matches
+#matches
+  .row
+    .col-md-12
+      h1 Recent Matches
 
 
-.row
-  .col-md-12
-    ul
-      - @matches.each do |match|
-        li.match style="display:inline-block; margin: 20px;"
-          .panel.panel-default style="padding: 10px;"
-            .row
-              .col-md-4
-                h3.text-center= match.home_team_name
+  .row
+    .col-md-12
+      ul
+        - @matches.each do |match|
+          li.match
+            .panel.panel-default
+              .row
+                .col-md-4
+                  h3.text-center= match.home_team_name
 
-              .col-md-4
-                h3.text-center vs.
+                .col-md-4
+                  h3.text-center vs.
 
-              .col-md-4
-                h3.text-center= match.away_team_name
+                .col-md-4
+                  h3.text-center= match.away_team_name
 
-            .row
-              h3.text-center
-                = DateTime.parse(match.date).strftime("%a %b %e")
+              .row
+                h3.text-center
+                  = DateTime.parse(match.date).strftime("%a %b %e")
 
-            .row
-              h1.text-center
-                = watch_stars(match).html_safe
+              .row
+                h1.text-center
+                  = watch_stars(match).html_safe

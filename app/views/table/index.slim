@@ -1,0 +1,29 @@
+h1 Table
+
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th
+        th Name
+        th Played
+        th Won
+        th Drawn
+        th Lost
+        th GD
+        th PTS
+    tbody
+      - @teams.each do |team|
+        tr.team
+          td= team["position"]
+          td
+            = image_tag team["crestURI"], height: 20
+            = team["teamName"]
+          td= team["playedGames"]
+          td= team["wins"]
+          td= team["draws"]
+          td= team["losses"]
+          td= team["goalDifference"]
+          td= team["points"]
+
+

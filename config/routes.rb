@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'standings' => 'standings#index', as: 'standings'
+  get 'table' => 'table#index', as: 'table'
 
   resources :matches, only: [:index, :show]
 

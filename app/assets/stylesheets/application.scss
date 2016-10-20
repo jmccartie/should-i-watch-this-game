@@ -5,3 +5,22 @@
 body {
   padding-top: 50px;
 }
+
+li.match {
+  display:inline-block;
+  margin: 20px;
+
+  .panel {
+    padding: 10px;
+  }
+}
+
+
+.team img, .match img {
+  margin-right: 5px;
+}
+
+#matches ul {
+  padding-left: 0;
+  list-style-type: none;
+}
