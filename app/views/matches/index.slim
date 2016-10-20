@@ -6,24 +6,41 @@
 
   .row
     .col-md-12
-      ul
-        - @matches.each do |match|
-          li.match
+      - @matches.each_slice(2) do |slice|
+        - slice.each do |match|
+          .col-md-6.match
             .panel.panel-default
-              .row
-                .col-md-4
-                  h3.text-center= match.home_team_name
+              .panel-heading
+                h4.text-center= watch_stars(match).html_safe
 
-                .col-md-4
-                  h3.text-center vs.
+              .panel-body
+                .row
+                  .col-md-4.text-center
+                    = image_tag match.home_team.crest_url, height: 100
+                  .col-md-4
+                  .col-md-4.text-center
+                    = image_tag match.away_team.crest_url, height: 100
+                .row
+                  .col-md-4
+                    h4.text-center
+                      small.ranking= match.home_team.ranking
+                      = match.home_team_name
 
-                .col-md-4
-                  h3.text-center= match.away_team_name
+                  .col-md-4
+                    h4.text-center vs.
 
-              .row
-                h3.text-center
-                  = DateTime.parse(match.date).strftime("%a %b %e")
+                  .col-md-4
+                    h4.text-center
+                      small.ranking= match.away_team.ranking
+                      = match.away_team_name
 
-              .row
-                h1.text-center
-                  = watch_stars(match).html_safe
+                .row
+                  h4.text-center
+                    = DateTime.parse(match.date).strftime("%a %b %e")
+
+                .row
+                  .text-center
+                    button.btn.btn-primary aria-controls="collapseExample" aria-expanded="false" data-target="#collapse#{match.id}" data-toggle="collapse" type="button"
+                      | Show Score
+                    .collapse id="collapse#{match.id}"
+                      h4= match.score
