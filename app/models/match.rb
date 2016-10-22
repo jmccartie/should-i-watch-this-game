@@ -10,10 +10,10 @@ class Match < Resource
     id_from_url data["_links"]["self"]["href"]
   end
 
-  def self.since(days=3)
-    Rails.cache.fetch("matches-#{days}", expires_in: 30.minutes) do
-      self.get("/competitions/426/fixtures?timeFrame=p#{days}").parsed_response["fixtures"]
-    end.map {|f| Match.new(f) }
+  def self.all(since: 3.days.ago)
+    Rails.cache.fetch("matches-#{since}", expires_in: 30.minutes) do
+      self.get("/competitions/426/fixtures").parsed_response["fixtures"]
+    end.map {|f| Match.new(f) }.select {|match| match.finished? && DateTime.parse(match.date) > since}
   end
 
   def self.find(id)
@@ -28,6 +28,10 @@ class Match < Resource
     define_method attr.underscore do
       self.data[attr]
     end
+  end
+
+  def finished?
+    self.status == "FINISHED"
   end
 
   def home_team
