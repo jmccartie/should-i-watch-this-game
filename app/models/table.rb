@@ -2,7 +2,7 @@ class Table < Resource
 
   def self.all
     @_all ||= begin
-      Rails.cache.fetch("league-table") do
+      Rails.cache.fetch("league-table", expires_in: 30.minutes) do
         self.get("/competitions/426/leagueTable").parsed_response["standing"]
       end
     end
