@@ -35,11 +35,11 @@ class Match < Resource
   end
 
   def home_team
-    Team.find team_id("home")
+    @_home_team ||= Team.find(team_id("home"))
   end
 
   def away_team
-    Team.find team_id("away")
+    @_away_team ||= Team.find(team_id("away"))
   end
 
   def home_goals
