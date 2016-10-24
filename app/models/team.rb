@@ -17,6 +17,10 @@ class Team < Resource
     data["crestUrl"]
   end
 
+  def short_name
+    data["shortName"]
+  end
+
   def ranking
     @_ranking ||= Table.all.find {|item| item["teamName"] == data["name"] }["position"]
   end
