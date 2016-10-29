@@ -29,6 +29,7 @@ class Team < Resource
   def short_name
     data["club"]["shortName"]
   end
+  alias_method :name, :short_name
 
   def ranking
     @_ranking ||= Table.all.find {|item| item[:team_name] == data["club"]["name"] }[:position]

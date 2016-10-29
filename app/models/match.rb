@@ -79,7 +79,7 @@ class Match < Resource
       score += 1 if home_goals + away_goals >= 5 # +1 for very high scoring game
 
       # +1 for two teams in the top 10
-      # score +=1 if Table.top_10.include?(home_team_name) && Table.top_10.include?(away_team_name)
+      score +=1 if Table.top_10.include?(home_team.name) && Table.top_10.include?(away_team.name)
 
       # +1 for an upset
       score +=1 if upset?

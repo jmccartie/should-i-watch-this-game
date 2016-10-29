@@ -6,7 +6,7 @@ class Table < Resource
       page = Nokogiri::HTML(resp)
 
       items = []
-      page.css("table tbody tr").each do |row|
+      page.css("table").first.css("tbody tr").each do |row|
         begin
           items << {
             position: row.css("td")[1].css("span.value").text,
@@ -22,7 +22,7 @@ class Table < Resource
 
           }
         rescue Exception => e
-          p "ERROR on row"
+          # nothing
         end
       end
       items
