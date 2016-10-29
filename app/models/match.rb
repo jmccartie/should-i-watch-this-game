@@ -7,47 +7,43 @@ class Match < Resource
   end
 
   def id
-    id_from_url data["_links"]["self"]["href"]
+    data["id"].to_i
   end
 
   def self.all(days_ago: 3)
-    Rails.cache.fetch("matches-#{days_ago}", expires_in: 30.minutes) do
-      self.get("/competitions/426/fixtures").parsed_response["fixtures"]
+    Rails.cache.fetch("matches-", expires_in: 30.minutes) do
+      self.get('/fixtures?comps=1&compSeasons=54&page=0&pageSize=40&sort=desc&statuses=C&altIds=true').parsed_response["content"]
     end.map {|f| Match.new(f) }.select {|match| match.finished? && DateTime.parse(match.date) > days_ago.days.ago}
   end
 
-  def self.find(id)
-    data = Rails.cache.fetch("match-#{id}") do
-      self.get("/fixtures/#{id}").parsed_response
-    end
-    Match.new(data)
-  end
-
-
-  ["_links", "date", "status", "matchday", "homeTeamName", "awayTeamName", "result", "odds"].each do |attr|
+  ["gameweek", "kickoff", "teams", "replay", "ground", "neutralGround", "status", "phase", "outcome", "clock", "goals"].each do |attr|
     define_method attr.underscore do
       self.data[attr]
     end
   end
 
+  def date
+    kickoff["label"]
+  end
+
   def finished?
-    self.status == "FINISHED"
+    status == "C"
   end
 
   def home_team
-    @_home_team ||= Team.find(team_id("home"))
+    @_home_team ||= Team.new(data["teams"].first["team"])
   end
 
   def away_team
-    @_away_team ||= Team.find(team_id("away"))
+    @_away_team ||= Team.new(data["teams"].last["team"])
   end
 
   def home_goals
-    self.result["goalsHomeTeam"]
+    data["teams"].first["score"].to_i
   end
 
   def away_goals
-    self.result["goalsAwayTeam"]
+    data["teams"].last["score"].to_i
   end
 
   def draw?
@@ -62,15 +58,16 @@ class Match < Resource
     if draw?
       nil
     elsif home_goals > away_goals
-      home_team_name
+      home_team
     else
-      away_team_name
+      away_team
     end
   end
 
   def upset?
-    (Table.top_10.include?(home_team_name) || Table.top_10.include?(away_team_name)) &&
-        (self.odds["homeWin"] < 0 && winner == home_team_name)
+    false
+    # (Table.top_10.include?(home_team_name) || Table.top_10.include?(away_team_name)) &&
+        # (self.odds["homeWin"] < 0 && winner == home_team_name)
   end
 
   def watch_score
@@ -82,7 +79,7 @@ class Match < Resource
       score += 1 if home_goals + away_goals >= 5 # +1 for very high scoring game
 
       # +1 for two teams in the top 10
-      score +=1 if Table.top_10.include?(home_team_name) && Table.top_10.include?(away_team_name)
+      # score +=1 if Table.top_10.include?(home_team_name) && Table.top_10.include?(away_team_name)
 
       # +1 for an upset
       score +=1 if upset?
@@ -91,11 +88,5 @@ class Match < Resource
     end
   end
 
-
-  private
-
-    def team_id(home_or_away)
-      id_from_url(data["_links"][home_or_away + "Team"]["href"])
-    end
 
 end

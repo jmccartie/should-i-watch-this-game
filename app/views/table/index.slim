@@ -14,16 +14,19 @@ h1 Table
         th PTS
     tbody
       - @teams.each do |team|
+
         tr.team
-          td= team["position"]
           td
-            = image_tag team["crestURI"]
-            = team["teamName"]
-          td= team["playedGames"]
-          td= team["wins"]
-          td= team["draws"]
-          td= team["losses"]
-          td= team["goalDifference"]
-          td= team["points"]
+            = team[:position]
+            span class=(team[:movement])
+          td
+            span class=(team[:crest_css])
+            = team[:team_name]
+          td= team[:played]
+          td= team[:wins]
+          td= team[:draws]
+          td= team[:losses]
+          td= team[:goal_difference]
+          td= team[:points]
 
 

@@ -15,11 +15,11 @@
 
               .panel-body
                 .row
-                  .col-md-4.text-center
-                    = image_tag match.home_team.crest_url, height: 100
                   .col-md-4
-                  .col-md-4.text-center
-                    = image_tag match.away_team.crest_url, height: 100
+                    span.center-block.badge-100 class=(match.home_team.crest_css)
+                  .col-md-4
+                  .col-md-4
+                    span.center-block.badge-100 class=(match.away_team.crest_css)
                 .row
                   .col-md-4
                     h4.text-center

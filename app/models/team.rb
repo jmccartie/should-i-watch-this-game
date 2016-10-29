@@ -1,3 +1,7 @@
+# {"name"=>"Arsenal", "club"=>{"name"=>"Arsenal", "shortName"=>"Arsenal", "abbr"=>"ARS", "id"=>1.0},
+# "teamType"=>"FIRST", "grounds"=>[{"name"=>"Emirates Stadium", "city"=>"London", "capacity"=>60272.0,
+# "location"=>{"latitude"=>51.5548, "longitude"=>-0.108533}, "id"=>52.0}], "shortName"=>"Arsenal", "id"=>1.0}
+
 class Team < Resource
 
   attr_reader :data
@@ -6,23 +10,28 @@ class Team < Resource
     @data = data
   end
 
-  def self.find(id)
-    Rails.cache.fetch("teams-#{id}") do
-      resp = self.get("/teams/#{id}").parsed_response
-      Team.new(resp)
-    end
+  def id
+    data["id"].to_i
   end
 
-  def crest_url
-    data["crestUrl"]
+  def self.find(id)
+    self.all.detect {|team| team.id == id }
+  end
+
+  def self.all
+    self.get('/compseasons/54/teams').parsed_response.map {|t| Team.new(t) }
+  end
+
+  def crest_css
+    data["altIds"]["opta"]
   end
 
   def short_name
-    data["shortName"]
+    data["club"]["shortName"]
   end
 
   def ranking
-    @_ranking ||= Table.all.find {|item| item["teamName"] == data["name"] }["position"]
+    @_ranking ||= Table.all.find {|item| item[:team_name] == data["club"]["name"] }[:position]
   end
 
 end
