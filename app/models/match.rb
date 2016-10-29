@@ -69,6 +69,7 @@ class Match < Resource
   end
 
   def upset?
+    return false unless self.odds.present?
     (Table.top_10.include?(home_team_name) || Table.top_10.include?(away_team_name)) &&
         (self.odds["homeWin"] < 0 && winner == home_team_name)
   end
