@@ -68,18 +68,21 @@ class Match < Resource
     (home_goals-away_goals).abs == 1
   end
 
+  def total_goals
+    home_goals+away_goals
+  end
+
   def watch_score
     @_watch_score ||= begin
       score = 1
       score -= 1 if draw? # -1 for tie game
 
-      score += 1 if home_goals + away_goals > 2  # +1 for high scoring game
-      score += 1 if home_goals + away_goals >= 5 # +1 for very high scoring game
+      score += 1 if total_goals > 2  # +1 for high scoring game
+      score += 1 if total_goals >= 5 # +1 for very high scoring game
 
       # +1 for two teams in the top 10
       score +=1 if Table.top_10.include?(home_team.long_name) && Table.top_10.include?(away_team.long_name)
-
-      score +=1 if close?
+      score +=1 if close? && total_goals > 2
 
       score
     end
