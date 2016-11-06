@@ -26,6 +26,10 @@ class Team < Resource
     data["altIds"]["opta"]
   end
 
+  def long_name
+    self.data["name"]
+  end
+
   def short_name
     data["club"]["shortName"]
   end

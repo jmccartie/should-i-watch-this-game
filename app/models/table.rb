@@ -31,7 +31,7 @@ class Table < Resource
 
   # returns array of team names
   def self.top_10
-    self.all.slice(0, 10).map {|t| t["team_name"] }
+    self.all.slice(0, 10).map {|t| t[:team_name] }
   end
 
 end

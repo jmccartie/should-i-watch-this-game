@@ -64,10 +64,8 @@ class Match < Resource
     end
   end
 
-  def upset?
-    false
-    # (Table.top_10.include?(home_team_name) || Table.top_10.include?(away_team_name)) &&
-        # (self.odds["homeWin"] < 0 && winner == home_team_name)
+  def close?
+    (home_goals-away_goals).abs == 1
   end
 
   def watch_score
@@ -79,10 +77,9 @@ class Match < Resource
       score += 1 if home_goals + away_goals >= 5 # +1 for very high scoring game
 
       # +1 for two teams in the top 10
-      score +=1 if Table.top_10.include?(home_team.name) && Table.top_10.include?(away_team.name)
+      score +=1 if Table.top_10.include?(home_team.long_name) && Table.top_10.include?(away_team.long_name)
 
-      # +1 for an upset
-      score +=1 if upset?
+      score +=1 if close?
 
       score
     end
