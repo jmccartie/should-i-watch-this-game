@@ -39,8 +39,20 @@
                     = DateTime.parse(match.date).strftime("%a %b %e")
 
                 .row
-                  .text-center
-                    button.btn.btn-primary aria-controls="collapseExample" aria-expanded="false" data-target="#collapse#{match.id}" data-toggle="collapse" type="button"
-                      | Show Score
-                    .collapse id="collapse#{match.id}"
-                      h4= match.score
+                  .col-md-12
+                    .text-center
+                      button.btn.btn-primary aria-controls="collapseExample" aria-expanded="false" data-target="#score#{match.id}" data-toggle="collapse" type="button"
+                        | Show Score
+                      .collapse id="score#{match.id}"
+                        h4= match.score
+
+                .spacer
+
+                .row
+                  .col-md-12
+                    .text-center
+                      button.btn.btn-primary aria-controls="collapseExample" aria-expanded="false" data-target="#goals#{match.id}" data-toggle="collapse" type="button"
+                        | Show Goals
+                      .collapse id="goals#{match.id}"
+                        h4= match.goals.join(", ")
+

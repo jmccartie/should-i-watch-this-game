@@ -30,6 +30,10 @@ class Match < Resource
     status == "C"
   end
 
+  def goals
+    data["goals"].map {|goal| goal["clock"]["label"].split("'").first }
+  end
+
   def home_team
     @_home_team ||= Team.new(data["teams"].first["team"])
   end
